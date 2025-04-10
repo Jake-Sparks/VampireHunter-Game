@@ -12,39 +12,53 @@ let rod = null;
 let reeling = false;
 
 let background = [
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,46,47,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,46,47,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+    [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 7, 50, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 52, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 70, 67, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 56, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 58, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 7, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 54, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+    [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
 ];
 
 
 let tilesPerRow = 6;
 let tileSize = 16;
+
+let playerSprites = {
+    walk: new Image(),
+    idle: new Image(),
+    attack: new Image(),
+};
 
 let oceanTileset = new Image();
 let beachTileset = new Image();
@@ -52,17 +66,23 @@ let beachTileset = new Image();
 let player = {
     x: 0,
     y: 150,
-    width: 32,
+    xChange: 0,
+    yChange: 0,
+    width: 48,
     height: 48,
     frameX: 0,
     frameY: 0,
-    isFighting: false, 
+    isFighting: false,
     coins: 0,
-    health: 100, 
+    health: 100,
     speed: 3,
-    animationState: "idle", 
-    frameCount: 4
+    animationState: "idle",
+    frameCount: 8,
+    direction: 1
 };
+
+let frameCounter = 0;
+let frameDelay = 5;
 
 let playerImage = new Image();
 
@@ -93,14 +113,17 @@ function init() {
     player.frameY = 0;
     player.health = 100;
 
+    window.addEventListener("keydown", activate, false);
+    window.addEventListener("keyup", deactivate, false)
+
     load_assets([
-        {var: oceanTileset, url: "static/images/oceanTileset.png"},
-        {var: beachTileset, url: "static/images/beachTileset.png"},
-        {var: playerSprites.walk, url: "static/images/playerwalk.png"}
-        {var: playerSprites.idle, url: "static/images/playeridle.png"},
-    ], function() {
+        { var: oceanTileset, url: "../static/images/oceanTileset.png" },
+        { var: beachTileset, url: "../static/images/beachTileset.png" },
+        { var: playerSprites.walk, url: "../static/images/playerwalk.png" },
+        { var: playerSprites.idle, url: "../static/images/playeridle.png" }
+    ], function () {
         console.log("All assets loaded!");
-    
+
         for (let i = 0; i < 5; i++) {
             spawnMonster();
         }
@@ -108,9 +131,6 @@ function init() {
         draw();
 
     });
-
-    window.addEventListener("keydown", activate, false);
-    window.addEventListener("keyup", deactivate, false)
 }
 
 
@@ -125,20 +145,19 @@ function draw() {
 
     then = now - (elapsed % fpsInterval);
 
-    // Clear and draw background
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = "#87cefa";
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    
+
+
     // Draw tileset background
     for (let r = 0; r < background.length; r += 1) {
         for (let c = 0; c < background[r].length; c += 1) {
             let tile = background[r][c];
             if (tile >= 0) {
                 let tileset, tileId;
-                
+
                 // Determine which tileset to use
-                if (tile < 50) { 
+                if (tile < 50) {
                     // Ocean tileset (0-49)
                     tileset = oceanTileset;
                     tileId = tile;
@@ -147,10 +166,10 @@ function draw() {
                     tileset = beachTileset;
                     tileId = tile - 50;
                 }
-                
+
                 let tileRow = Math.floor(tileId / tilesPerRow);
                 let tileCol = Math.floor(tileId % tilesPerRow);
-                
+
                 context.drawImage(tileset,
                     tileCol * tileSize, tileRow * tileSize, tileSize, tileSize,
                     c * tileSize, r * tileSize, tileSize, tileSize);
@@ -158,20 +177,37 @@ function draw() {
         }
     }
 
-    // Draw the player
-    let sprite = playerSprites[player.animationState];
-    context.drawImage(
-        sprite,
-        player.frameX * player.width, player.frameY * player.height, player.width, player.height,
-        player.x, player.y, player.width, player.height
-    );
+    movePlayer();
 
-    // Update animation frame
-    if ((moveLeft || moveRight || moveUp || moveDown) && !(moveLeft && moveRight)) {
-        player.frameX = (player.frameX + 1) % player.frameCount;
+    let currentSprite;
+    if (player.animationState === "walk") {
+        currentSprite = playerSprites.walk;
+    } else {
+        currentSprite = playerSprites.idle;
     }
 
-    movePlayer();
+    context.drawImage(
+        currentSprite, 
+        player.frameX * player.width, 
+        player.frameY * player.height, 
+        player.width,
+        player.height, 
+        player.x, 
+        player.y, 
+        player.width, 
+        player.height 
+    );
+
+    if ((moveLeft || moveRight || moveUp || moveDown) && !(moveLeft && moveRight)) {
+        frameCounter++;
+        if (frameCounter >= frameDelay) {
+            player.frameX = (player.frameX + 1) % player.frameCount; // Loop through frames
+            frameCounter = 0;
+        }
+    } else {
+        player.frameX = 0; // Reset to the first frame when idle
+    }
+
 
     // Draw the monsters
     for (let i = 0; i < monsterArray.length; i++) {
@@ -216,14 +252,14 @@ function draw() {
             if (Math.random() < 0.02) {
                 monster.angle += (Math.random() - 0.5) * 0.5;
             }
-            
+
             // NEW: Occasionally move toward player if in range
             if (Math.random() < 0.01) {
                 let distToPlayer = Math.hypot(player.x - monster.x, player.y - monster.y);
                 if (distToPlayer < 150) {
                     monster.angle = Math.atan2(player.y - monster.y, player.x - monster.x);
                     monster.speed = 1.5; // Speed up when chasing player
-                    
+
                     // Attack player if close enough
                     if (distToPlayer < 30 && !monster.attackCooldown) {
                         console.log("Monster attacks!");
@@ -275,7 +311,7 @@ function draw() {
         context.strokeStyle = "brown";
         context.lineWidth = 2;
         context.beginPath();
-        context.moveTo(player.x + player.width/2, player.y + player.height/2); // Start from player center
+        context.moveTo(player.x + player.width / 2, player.y + player.height / 2); // Start from player center
         context.lineTo(rod.x, rod.y); // Extend to weapon position
         context.stroke();
 
@@ -293,10 +329,65 @@ function draw() {
 
 
 function movePlayer() {
-    if (moveLeft && player.x > 0) player.x -= player.speed;
-    if (moveRight && player.x + player.size < canvas.width) player.x += player.speed;
-    if (moveUp && player.y > 0) player.y -= player.speed;
-    if (moveDown && player.y + player.size < canvas.height) player.y += player.speed;
+    // Handle horizontal movement
+    if (moveLeft && player.x > 0) {
+        player.xChange -= 0.5;
+        player.animationState = "walk";
+        player.frameY = 1; // Row for walking left
+    }
+    if (moveRight && player.x + player.width < canvas.width) {
+        player.xChange += 0.5;
+        player.animationState = "walk";
+        player.frameY = 2; // Row for walking right
+    }
+
+    // Handle vertical movement
+    if (moveUp && player.y > 0) {
+        player.yChange -= 0.5;
+        player.animationState = "walk";
+        player.frameY = 3; // Row for walking up
+    }
+    if (moveDown && player.y + player.height < canvas.height) {
+        player.yChange += 0.5;
+        player.animationState = "walk";
+        player.frameY = 0; // Row for walking down
+    }
+
+    // If no movement keys are pressed, set to idle
+    if (!moveLeft && !moveRight && !moveUp && !moveDown) {
+        player.animationState = "idle";
+    }
+
+    // Update the player's position
+    player.x += player.xChange;
+    player.y += player.yChange;
+
+    // Apply friction to slow down the player
+    player.xChange *= 0.9;
+    player.yChange *= 0.9;
+
+    // Wrap around the screen horizontally
+    if (player.x + player.width < 0) {
+        player.x = canvas.width;
+    } else if (player.x > canvas.width) {
+        player.x = -player.width;
+    }
+
+    // Wrap around the screen vertically
+    if (player.y + player.height < 0) {
+        player.y = canvas.height;
+    } else if (player.y > canvas.height) {
+        player.y = -player.height;
+    }
+}
+
+function collides(obj1, obj2) {
+    return (
+        obj1.x < obj2.x + obj2.size &&
+        obj1.x + obj1.size > obj2.x &&
+        obj1.y < obj2.y + obj2.size &&
+        obj1.y + obj1.size > obj2.y
+    );
 }
 
 
@@ -307,9 +398,9 @@ function spawnMonster() {
         { color: "purple", size: 15, attackPower: 3, strength: 10 },
         { color: "darkgreen", size: 25, attackPower: 8, strength: 20 }
     ];
-    
+
     const monsterType = monsterTypes[Math.floor(Math.random() * monsterTypes.length)];
-    
+
     let monster = {
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -323,25 +414,15 @@ function spawnMonster() {
         escapeChance: Math.random() * 0.2 + 0.05,
         attackCooldown: false // To prevent continuous attacks
     };
-    
+
     // Make sure monster doesn't spawn too close to player
     let distToPlayer = Math.hypot(player.x - monster.x, player.y - monster.y);
     if (distToPlayer < 100) {
-        monster.x = (monster.x + canvas.width/2) % canvas.width;
-        monster.y = (monster.y + canvas.height/2) % canvas.height;
+        monster.x = (monster.x + canvas.width / 2) % canvas.width;
+        monster.y = (monster.y + canvas.height / 2) % canvas.height;
     }
-    
+
     monsterArray.push(monster);
-}
-
-
-function collides(obj1, obj2) {
-    return (
-        obj1.x < obj2.x + obj2.size &&
-        obj1.x + obj1.size > obj2.x &&
-        obj1.y < obj2.y + obj2.size &&
-        obj1.y + obj1.size > obj2.y
-    );
 }
 
 
@@ -362,15 +443,19 @@ function activate(event) {
     if (key === "ArrowLeft" || key === "a") {
         moveLeft = true;
         player.animationState = "walk";
+        player.frameY = 1;
     } else if (key === "ArrowUp" || key === "w") {
         moveUp = true;
         player.animationState = "walk";
+        player.frameY = 3;
     } else if (key === "ArrowRight" || key === "d") {
         moveRight = true;
         player.animationState = "walk";
+        player.frameY = 2;
     } else if (key === "ArrowDown" || key === "s") {
         moveDown = true;
         player.animationState = "walk";
+        player.frameY = 0;
     }
 
     if (key === "e") {
@@ -379,8 +464,8 @@ function activate(event) {
             let angle = Math.atan2(mouseY - player.y, mouseX - player.x);
 
             rod = {
-                x: player.x + player.width/2,
-                y: player.y + player.height/2,
+                x: player.x + player.width / 2,
+                y: player.y + player.height / 2,
                 size: 5,
                 speed: 5,
                 angle: angle,
@@ -423,19 +508,11 @@ function deactivate(event) {
     }
 }
 
-
-let playerSprites = {
-    walk: new Image(),
-    idle: new Image(),
-    attack: new Image(),
-};
-
-
 function load_assets(assets, callback) {
     let num_assets = assets.length;
     let loaded_assets = 0;
 
-    let loaded = function() {
+    let loaded = function () {
         console.log("Asset loaded");
         loaded_assets++;
         if (loaded_assets === num_assets) {
@@ -455,7 +532,6 @@ function load_assets(assets, callback) {
         element.src = asset.url;
     }
 }
-
 
 function stop() {
     window.removeEventListener("keydown", activate);
