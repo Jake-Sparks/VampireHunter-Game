@@ -127,13 +127,13 @@ function init() {
     window.addEventListener("keyup", deactivate, false)
 
     load_assets([
-        { var: vampTileset, url: "../static/images/tileset.png" },
-        { var: playerSprites.walk, url: "../static/images/vampire1_run.png" },
-        { var: playerSprites.idle, url: "../static/images/vampire1_idle.png" }
+        { var: vampTileset, url: "/static/images/tileset.png" },
+        { var: playerSprites.walk, url: "/static/images/vampire1_run.png" },
+        { var: playerSprites.idle, url: "/static/images/vampire1_idle.png" }
     ], function () {
         console.log("All assets loaded!");
         
-        // Start the first wave properly
+        // Start the first wave
         spawnWave();
         
         draw();
@@ -233,11 +233,11 @@ function draw() {
                         monster.speed = 1.5; // Speed up when chasing player
 
                         // Attack player if close enough
-                        if (distToPlayer < 30 && !monster.attackCooldown) {
+                        if (distToPlayer < 50 && !monster.attackCooldown) {
                             console.log("Monster attacks!");
                             player.health -= monster.attackPower;
                             monster.attackCooldown = true;
-                            setTimeout(() => { monster.attackCooldown = false; }, 2000); // 2 second cooldown
+                            setTimeout(() => { monster.attackCooldown = false; }, 1000); // 2 second cooldown
                         }
                     }
                 }
@@ -258,10 +258,10 @@ function draw() {
     // UI elements
     context.fillStyle = "black";
     context.font = "18px Arial";
+    context.fillText(`Health: ${player.health}`, 10, 45);
     context.fillText(`Score: ${score}`, 10, 70);
     context.fillText(`Coins: ${player.coins}`, 10, 20);
-    context.fillText(`Health: ${player.health}`, 10, 45);
-    context.fillText(`Wave: ${currentWave}/${maxWaves}`, 10, 95); // Added wave counter
+    context.fillText(`Wave: ${currentWave}/${maxWaves}`, 10, 95); 
 
     // Draw the custom crosshair
     context.strokeStyle = "red"; // Crosshair color
@@ -443,7 +443,7 @@ function movePlayer() {
     player.x += player.xChange;
     player.y += player.yChange;
 
-    // Apply friction to slow down the player
+    // Apply friction to the player
     player.xChange *= 0.9;
     player.yChange *= 0.9;
 
@@ -591,7 +591,7 @@ function updateWaveProgress() {
         
         // If not the final wave, prepare for the next one
         if (currentWave < maxWaves) {
-            console.log(`Preparing for wave ${currentWave + 1}...`);
+            console.log(`Preparing for wave ${currentWave + 1}`);
             
             // Show wave completion message on screen
             context.fillStyle = "green";
@@ -729,10 +729,10 @@ function activate(event) {
                 x: player.x + player.width / 2,
                 y: player.y + player.height / 2,
                 size: 5,
-                speed: 5,
+                speed: 15,
                 angle: angle,
                 maxDistance: distance, // Set the maximum distance to the crosshair
-                traveledDistance: 0, // Track how far the hook has traveled
+                traveledDistance: 0,
                 capturedMonster: null,
                 pulling: false
             };

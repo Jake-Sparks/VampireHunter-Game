@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='vampire.css') }}" />
+<script src="{{ url_for('static', filename='vampire.js') }}" type="module"></script>
+{% endblock %}
+
+{% block main_content %}
+<canvas width="1024" height="576"></canvas>
+{% endblock %}
+

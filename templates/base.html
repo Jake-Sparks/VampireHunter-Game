@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ caption }}</title>
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body>
+    <header>
+        {% block header %}
+        {% endblock %}
+    </header>
+    <nav>
+        {% if g.user %}
+            <ul>
+                <li>{{ g.user }}</li>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>   
+        {% else %}
+            <ul>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('signup') }}">Sign-up</a></li>
+            </ul>
+        {% endif %}
+    </nav>
+
+    {% block main_content %}
+    {% endblock %}
+</body>
+
+</html>
