@@ -17,6 +17,7 @@ let currentWave = 1;
 let maxWaves = 5;
 let enemiesRemaining = 0; // tracks how many enemies left in the wave
 let waveInProgress = false;
+let gameWon = false;
 
 let background = [
     [56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56],
@@ -65,6 +66,14 @@ let playerSprites = {
     walk: new Image(),
     idle: new Image(),
     attack: new Image()
+};
+
+let monsterSprites = {
+    purple: new Image(),
+    red: new Image(),
+    green: new Image(),
+    blue: new Image(),
+    boss: new Image()
 };
 
 let vampTileset = new Image();
@@ -137,7 +146,12 @@ function init() {
     load_assets([
         { var: vampTileset, url: "../static/images/tileset.png" },
         { var: playerSprites.walk, url: "../static/images/vampire1_run.png" },
-        { var: playerSprites.idle, url: "../static/images/vampire1_idle.png" }
+        { var: playerSprites.idle, url: "../static/images/vampire1_idle.png" },
+        { var: monsterSprites.purple, url: "../static/images/goblin.png" },
+        { var: monsterSprites.red, url: "../static/images/BODY_male.png" },
+        { var: monsterSprites.green, url: "../static/images/vampire2.png" },
+        { var: monsterSprites.blue, url: "../static/images/vampire3.png" },
+        { var: monsterSprites.boss, url: "../static/images/boss.png" }
     ], function () {
         console.log("All assets loaded!");
 
@@ -161,8 +175,7 @@ function draw() {
     then = now - (elapsed % fpsInterval);
 
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.fillStyle = "#856cefa";
-
+    context.fillStyle = "#856cef"; // Fixed hex color code
 
     drawBackground();
     drawPlayer();
@@ -176,40 +189,37 @@ function draw() {
     for (let i = 0; i < monsterArray.length; i++) {
         let monster = monsterArray[i];
 
-        // First draw the monster regardless of type
         if (monster.type === "boss") {
-            // Draw the boss
-            context.fillStyle = monster.color;
-            context.fillRect(monster.x, monster.y, monster.size, monster.size);
-
-            // Draw a crown on top to make it obvious it's the boss
-            context.fillStyle = "gold";
-            context.beginPath();
-            context.moveTo(monster.x + monster.size / 2, monster.y - 10);
-            context.lineTo(monster.x + monster.size * 0.3, monster.y);
-            context.lineTo(monster.x + monster.size * 0.7, monster.y);
-            context.closePath();
-            context.fill();
+            // Draw the boss sprite
+            context.drawImage(
+                boss.sprite,
+                boss.frameX * monster.width,
+                boss.frameY * monster.height,
+                boss.width,
+                boss.height,
+                boss.x,       // X position
+                boss.y,       // Y position
+                boss.size,    // Width
+                boss.size     // Height
+            );
 
             // Draw boss health bar
             context.fillStyle = "red";
             context.fillRect(monster.x, monster.y - 15, monster.size, 5);
-
-            // Health remaining (green)
             context.fillStyle = "green";
             context.fillRect(monster.x, monster.y - 15, monster.size * (monster.health / 500), 5);
 
             // Boss behavior
-            monster.move(); // Boss movement
-            monster.fireFlames(); // Boss attacks
+            monster.move();
+            monster.fireFlames();
 
-            // Check if the boss is defeated
             if (monster.health <= 0) {
                 console.log("Boss defeated!");
                 monsterArray.splice(i, 1);
-                i--; // Adjust index after removing element
-                enemiesRemaining--; // Decrement enemiesRemaining
+                i--;
+                enemiesRemaining--;
                 score += 500;
+
                 if (currentWave >= maxWaves) {
                     console.log("You won the game!");
                     stop(); // End the game
@@ -219,15 +229,32 @@ function draw() {
                 }
             }
         } else {
-            // Regular monster rendering and behavior
-            context.fillStyle = monster.color;
-            context.fillRect(monster.x, monster.y, monster.size, monster.size);
+            // Update animation frame
+            monster.frameCounter++;
+            if (monster.frameCounter >= monster.frameDelay) {
+                monster.frameX = (monster.frameX + 1) % monster.frameCount;
+                monster.frameCounter = 0;
+            }
 
-            // Small health bar for regular monsters
+
+            // Draw regular monster sprite
+            context.drawImage(
+                monster.sprite, // Monster sprite
+                monster.frameX * monster.width,
+                monster.frameY * monster.height,
+                monster.width,
+                monster.height,
+                monster.x,       // X position
+                monster.y,       // Y position
+                monster.size,    // Width
+                monster.size     // Height
+            );
+
+            // Draw health bar for regular monsters
             context.fillStyle = "red";
             context.fillRect(monster.x, monster.y - 5, monster.size, 3);
             context.fillStyle = "green";
-            let maxHealth = 30 + (currentWave * 5); // Estimate max health based on wave
+            let maxHealth = 30 + (currentWave * 5);
             context.fillRect(monster.x, monster.y - 5, monster.size * (monster.health / maxHealth), 3);
 
             if (monster.captured && !monster.escapeCooldown) {
@@ -265,6 +292,22 @@ function draw() {
                 monster.x += Math.cos(monster.angle) * monster.speed; // Move toward player
                 monster.y += Math.sin(monster.angle) * monster.speed; // Move toward player
 
+                if (Math.abs(Math.cos(monster.angle)) > Math.abs(Math.sin(monster.angle))) {
+                    // Moving more horizontally than vertically
+                    if (Math.cos(monster.angle) > 0) {
+                        monster.frameY = 3; // Right
+                    } else {
+                        monster.frameY = 2; // Left
+                    }
+                } else {
+                    // Moving more vertically than horizontally
+                    if (Math.sin(monster.angle) > 0) {
+                        monster.frameY = 0; // Down
+                    } else {
+                        monster.frameY = 1; // Up
+                    }
+                }
+                
                 // Attack player if close enough
                 let distToPlayer = Math.hypot(player.x - monster.x, player.y - monster.y);
                 if (distToPlayer < 50 && !monster.attackCooldown) {
@@ -361,9 +404,6 @@ function draw() {
                     hook.pulling = true;
                     monster.speed = 0;
 
-                    // Add visual and physical feedback when capturing
-                    createDamageNumber(monster.x, monster.y, "Caught!");
-
                     // Reset momentum when a monster is caught
                     hook.momentum = { x: 0, y: 0 };
                     console.log("Monster captured!");
@@ -401,13 +441,14 @@ function draw() {
                 monsterArray.splice(monsterArray.indexOf(hook.capturedMonster), 1);
                 hook.capturedMonster = null;
                 hook = null;
-                // hook.pulling = false;
+                // hook.pulling = false; // This line is commented out since hook becomes null
                 enemiesRemaining--;
                 score += 100;
             }
         }
     }
 }
+
 
 function drawBackground() {
     for (let r = 0; r < background.length; r += 1) {
@@ -562,6 +603,7 @@ function createDamageNumber(x, y, amount) {
     });
 }
 
+
 function drawDamageNumbers() {
     for (let i = 0; i < damageNumbers.length; i++) {
         let dmg = damageNumbers[i];
@@ -626,7 +668,7 @@ function drawProjectiles() {
 
 function collides(obj1, obj2) {
     if (!obj1 || !obj2) {
-        return false; 
+        return false;
     }
     return (
         obj1.x < obj2.x + obj2.size &&
@@ -717,12 +759,13 @@ function spawnWave() {
     debugGameState(); // Debug output
 }
 
+
 function createMonster(wave) {
     const monsterTypes = [
-        { color: "purple", size: 15, attackPower: 3, health: 30 },
-        { color: "red", size: 20, attackPower: 5, health: 45 },
-        { color: "darkgreen", size: 25, attackPower: 8, health: 60 },
-        { color: "blue", size: 30, attackPower: 10, health: 75 }
+        { color: "purple", size: 45, attackPower: 3, health: 25, sprite: monsterSprites.purple },
+        { color: "red", size: 60, attackPower: 5, health: 35, sprite: monsterSprites.red },
+        { color: "darkgreen", size: 70, attackPower: 8, health: 50, sprite: monsterSprites.green },
+        { color: "blue", size: 80, attackPower: 10, health: 65, sprite: monsterSprites.blue }
     ];
 
     // Get appropriate monster type for the wave (with bounds checking)
@@ -733,6 +776,14 @@ function createMonster(wave) {
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         size: monsterType.size,
+        sprite: monsterType.sprite,
+        frameX: 0,
+        frameY: 0,
+        frameCount: 4,
+        frameDelay: 5,
+        frameCounter: 0,
+        width: 64,
+        height: 64,
         color: monsterType.color,
         angle: Math.random() * Math.PI * 2,
         speed: Math.random() * (1 + wave * 0.3), // Increase speed with wave
@@ -748,6 +799,7 @@ function createMonster(wave) {
     return monster;
 }
 
+
 function updateWaveProgress() {
     // Handle ranged monster attacks
     for (let monster of monsterArray) {
@@ -760,6 +812,8 @@ function updateWaveProgress() {
     if (enemiesRemaining <= 0 && waveInProgress) {
         waveInProgress = false;
         console.log(`Wave ${currentWave} completed!`);
+
+        player.health = 100;
 
         // If not the final wave, prepare for the next one
         if (currentWave < maxWaves) {
@@ -786,6 +840,7 @@ function updateWaveProgress() {
     }
 }
 
+
 function fireProjectile(monster) {
     if (!monster || typeof monster.x !== "number" || typeof monster.y !== "number") {
         console.error("Invalid monster object for firing projectile");
@@ -805,11 +860,17 @@ function fireProjectile(monster) {
     projectiles.push(projectile);
 }
 
+
 function spawnBoss() {
     let boss = {
         x: canvas.width / 2,
         y: canvas.height / 2,
         size: 60,
+        sprite: monsterSprites.boss,
+        frameX: 0,
+        frameY: 0,
+        width: 64,
+        height: 64,
         color: "black",
         health: 500, // Boss health
         type: "boss", // Add type property
@@ -928,7 +989,7 @@ function activate(event) {
     // FOR DEBUG ONLY - manual wave progression with 'n' key
     if (key === "n") {
         debugGameState();
-        if (!waveInProgress) {
+        if (waveInProgress) {
             currentWave++;
             if (currentWave <= maxWaves) {
                 spawnWave();
@@ -940,6 +1001,7 @@ function activate(event) {
         }
     }
 }
+
 
 function deactivate(event) {
     let key = event.key.toLowerCase();
@@ -961,6 +1023,7 @@ function deactivate(event) {
         player.frameY = player.lastDirection; // Use last direction for idle pose
     }
 }
+
 
 function load_assets(assets, callback) {
     let num_assets = assets.length;
@@ -984,6 +1047,7 @@ function load_assets(assets, callback) {
     }
 }
 
+
 function debugGameState() {
     console.log("=== GAME STATE DEBUG ===");
     console.log(`Current Wave: ${currentWave}`);
@@ -992,6 +1056,7 @@ function debugGameState() {
     console.log(`Monster Array Length: ${monsterArray.length}`);
     console.log("========================");
 }
+
 
 function stop() {
     window.removeEventListener("keydown", activate);

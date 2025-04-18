@@ -30,13 +30,14 @@ def login_required(view):
 def home():
     return render_template("home_page.html")
 
+
 @app.route("/play", methods=["GET", "POST"])
 @login_required
 def play():
     return render_template("game.html")
 
 
-# # ----------------------- USER SECTION -------------------------
+# ----------------------- USER SECTION -------------------------
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
