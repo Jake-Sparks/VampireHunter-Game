@@ -133,14 +133,14 @@ function init() {
 
     canvas.addEventListener("mousemove", (event) => {
         let rect = canvas.getBoundingClientRect();
-        let scaleX = canvas.width / rect.width; // Horizontal scale factor
-        let scaleY = canvas.height / rect.height; // Vertical scale factor
+        let scaleX = canvas.width / rect.width; // Horizontal 
+        let scaleY = canvas.height / rect.height; // Vertical
         mouseX = (event.clientX - rect.left) * scaleX;
         mouseY = (event.clientY - rect.top) * scaleY;
     });
 
     canvas.addEventListener("click", (event) => {
-        // Only allow melee attack if we have a captured monster
+        // Only allow melee attack if captured monster
         if (hook && hook.capturedMonster) {
             performMeleeAttack(hook.capturedMonster);
         }
@@ -163,9 +163,6 @@ function init() {
         { var: monsterSprites.blue, url: "../static/images/vampire3.png" },
         { var: monsterSprites.boss, url: "../static/images/boss.png" }
     ], function () {
-        console.log("All assets loaded!");
-
-        // Start the first wave
         spawnWave();
 
         draw();
@@ -185,7 +182,7 @@ function draw() {
     then = now - (elapsed % fpsInterval);
 
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.fillStyle = "#856cef"; // Fixed hex color code
+    context.fillStyle = "#856cef"; 
 
     drawBackground();
     drawPlayer();
@@ -195,7 +192,7 @@ function draw() {
     drawDamageNumbers();
     preventMonsterOverlap();
 
-    // Draw wave text if active
+    // Draw wave text
     if (waveText && waveTextTimer > 0) {
         context.fillStyle = "green";
         context.font = "48px Arial";
@@ -256,7 +253,6 @@ function draw() {
         context.fillRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
 
         // Draw the green
-        let maxHealth = monster.type === "boss" ? 500 : (30 + currentWave * 5); // Adjust max health based on type
         let healthPercentage = monster.health / monster.maxHealth;
         context.fillStyle = "green";
         context.fillRect(healthBarX, healthBarY, healthBarWidth * healthPercentage, healthBarHeight);
@@ -439,7 +435,6 @@ function draw() {
 
             // Stop the hook if it has traveled its maximum distance
             if (hook.traveledDistance >= hook.maxDistance && !hook.capturedMonster) {
-                console.log("Hook reached its maximum distance.");
                 hook = null; // Reset the hook
                 return;
             }
@@ -459,7 +454,6 @@ function draw() {
 
                     // Reset momentum when a monster is caught
                     hook.momentum = { x: 0, y: 0 };
-                    console.log("Monster captured!");
                     break;
                 }
             }
@@ -639,8 +633,6 @@ function performMeleeAttack(monster) {
 
         // Show damage number
         createDamageNumber(monster.x, monster.y, damage);
-
-        console.log(`Melee attack! Dealt ${damage} damage.`);
     }
 }
 
@@ -798,38 +790,29 @@ function spawnWave() {
         // Adjust the number of monsters for Wave 4 and Wave 5
         if (currentWave === 4) {
             numMonsters = 10; // Set a fixed number of monsters for Wave 4
-        } else if (currentWave === 5) {
-            numMonsters = 12; // Slightly more monsters for Wave 5
         } else {
             numMonsters = currentWave * 3 + 3; // Default scaling for other waves
         }
-
-        console.log(`Spawning ${numMonsters} monsters for wave ${currentWave}`);
 
         for (let i = 0; i < numMonsters; i++) {
             let monster = createMixedMonster(currentWave);
             monsterArray.push(monster);
         }
 
-        // Spawn health pick-ups in Wave 4 and Wave 5
-        if (currentWave === 4 || currentWave === 5) {
+        // Spawn health pick-ups in Wave 3, Wave 4
+        if (currentWave === 3 || currentWave === 4) {
             let numPickups = 3; // Number of health pick-ups to spawn
             for (let i = 0; i < numPickups; i++) {
                 spawnHealthPickup();
             }
         }
     } else {
-        // Final wave: spawn boss
-        console.log("BOSS WAVE STARTING!");
         spawnBoss();
     }
 
-    // Set the wave progress tracking variables
     enemiesRemaining = monsterArray.length;
     waveInProgress = true;
-
-    console.log(`Wave ${currentWave} started with ${enemiesRemaining} enemies!`);
-    debugGameState(); // Debug output
+    debugGameState();
 }
 
 
@@ -949,7 +932,7 @@ function updateWaveProgress() {
             }, 3000); // Delay the next wave by 3 seconds
         } else {
             // Game complete
-            console.log("All waves completed! Victory!");
+            console.log("All waves completed!");
             waveText = "VICTORY!";
             waveTextTimer = 180;
             stop();
@@ -960,7 +943,8 @@ function updateWaveProgress() {
 
 
 function fireProjectile(monster) {
-    if (!monster || monster.health <= 0 || monster.captured) {
+    // only valid monster objects being processed (error logged otherwise)
+    if (!monster || typeof monster !== "object" || monster.health <= 0 || monster.captured) {
         console.error("Invalid monster object for firing projectile");
         return;
     }
@@ -1047,10 +1031,12 @@ function spawnBoss() {
     monsterArray.push(boss);
     enemiesRemaining = 1;
 
-    // Spawn health pick-ups for the boss wave
-    let numPickups = 4; // Number of health pick-ups to spawn
-    for (let i = 0; i < numPickups; i++) {
-        spawnHealthPickup();
+    // Spawn additional health pickups if it's Wave 5
+    if (currentWave === 5) {
+        let numPickups = 5; // Number of health pick-ups to spawn
+        for (let i = 0; i < numPickups; i++) {
+            spawnHealthPickup();
+        }
     }
 }
 
@@ -1107,7 +1093,7 @@ function activate(event) {
     }
 
     if (key === "r" && hook) {
-        console.log("You withdrew your hook");
+        console.log("Player withdrew hook");
         if (hook.capturedMonster) {
             hook.capturedMonster.captured = false;
             hook.capturedMonster.speed = Math.random() * 2 + 1;
@@ -1115,20 +1101,18 @@ function activate(event) {
         hook = null;
     }
 
-    // // FOR DEBUG ONLY - manual wave progression with 'n' key
-    // if (key === "n") {
-    //     debugGameState();
-    //     if (waveInProgress) {
-    //         currentWave++;
-    //         if (currentWave <= maxWaves) {
-    //             spawnWave();
-    //         } else {
-    //             console.log("Already at max wave!");
-    //         }
-    //     } else {
-    //         console.log("Can't start new wave while current wave is in progress!");
-    //     }
-    // }
+    // FOR DEBUG ONLY - manual wave progression with 'n' key
+    if (key === "n") {
+        debugGameState();
+        if (waveInProgress) {
+            currentWave++;
+            if (currentWave <= maxWaves) {
+                spawnWave();
+            } else {
+                console.log("Already at max wave!");
+            }
+        }
+    }
 }
 
 
@@ -1157,7 +1141,6 @@ function deactivate(event) {
 function load_assets(assets, callback) {
     let num_assets = assets.length;
     let loaded = function () {
-        console.log("Asset loaded");
         num_assets = num_assets - 1;
         if (num_assets === 0) {
             callback();
@@ -1166,10 +1149,8 @@ function load_assets(assets, callback) {
     for (let asset of assets) {
         let element = asset.var;
         if (element instanceof HTMLImageElement) {
-            console.log("image");
             element.addEventListener("load", loaded, false);
         } else if (element instanceof HTMLAudioElement) {
-            console.log("audio");
             element.addEventListener("canplaythrough", loaded, false);
         }
         element.src = asset.url;
@@ -1183,7 +1164,7 @@ function debugGameState() {
     console.log(`Wave In Progress: ${waveInProgress}`);
     console.log(`Enemies Remaining: ${enemiesRemaining}`);
     console.log(`Monster Array Length: ${monsterArray.length}`);
-    console.log("========================");
+    console.log("-------------------------");
 }
 
 
