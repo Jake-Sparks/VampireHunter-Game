@@ -28,13 +28,18 @@ def login_required(view):
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    return render_template("home_page.html")
+    return render_template("home_page.html", caption="Home")
 
 
 @app.route("/play", methods=["GET", "POST"])
 @login_required
 def play():
-    return render_template("game.html")
+    return render_template("game.html", caption="Vampire Hunter")
+
+
+@app.route("/attributions", methods=["GET", "POST"])
+def attributions():
+    return render_template("attributions.html", caption="Attributions")
 
 
 # ----------------------- USER SECTION -------------------------
@@ -55,7 +60,7 @@ def signup():
                        VALUES (?, ?);""", (user_id, generate_password_hash(password)))
             db.commit() 
             return redirect( url_for("login") )
-    return render_template("signup.html", form=form, caption="Sign_up")
+    return render_template("signup.html", form=form, caption="Sign-up")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -80,7 +85,7 @@ def login():
             if not next_page:
                 next_page = url_for("home")
             return redirect(next_page)
-    return render_template("login.html", form=form)
+    return render_template("login.html", form=form, caption="Log-in")
 
 
 @app.route("/logout")
