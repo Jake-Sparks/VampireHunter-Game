@@ -16,7 +16,7 @@ let healthPickups = [];
 
 let currentWave = 1;
 let maxWaves = 5;
-let enemiesRemaining = 0; // tracks how many enemies left in the wave
+let enemiesRemaining = 0;
 let waveInProgress = false;
 
 let background = [
@@ -68,6 +68,9 @@ let playerSprites = {
     attack: new Image()
 };
 
+
+playerSprites.attack.src = "../static/images/vampire1_attack.png";
+
 let monsterSprites = {
     purple: new Image(),
     red: new Image(),
@@ -78,6 +81,7 @@ let monsterSprites = {
 
 let healthIcon = new Image();
 healthIcon.src = "../static/images/heart.png";
+
 
 let vampTileset = new Image();
 
@@ -95,12 +99,15 @@ let player = {
     health: 100,
     speed: 3,
     animationState: "idle",
-    frameCount: 4,
+    frameCount: 6,
     direction: 1,
     lastDirection: 0
 };
 
 let score = 0;
+
+let waveText = null;
+let waveTextTimer = 0;
 
 let frameCounter = 0;
 let frameDelay = 5;
@@ -188,6 +195,18 @@ function draw() {
     drawDamageNumbers();
     preventMonsterOverlap();
 
+    // Draw wave text if active
+    if (waveText && waveTextTimer > 0) {
+        context.fillStyle = "green";
+        context.font = "48px Arial";
+        context.textAlign = "center";
+        context.fillText(waveText, canvas.width / 2, canvas.height / 2);
+        waveTextTimer--; // Decrease the timer
+        if (waveTextTimer <= 0) {
+            waveText = null; // Clear the text when the timer ends
+        }
+    }
+
     // Draw Monsters
     for (let i = 0; i < monsterArray.length; i++) {
         let monster = monsterArray[i];
@@ -227,22 +246,21 @@ function draw() {
         );
 
         // Health bar
-        let healthBarWidth = 50; // Fixed width for all health bars
-        let healthBarHeight = 5; // Fixed height for all health bars
+        let healthBarWidth = 50;
+        let healthBarHeight = 5;
         let healthBarX = monster.x + (monster.size / 2) - (healthBarWidth / 2); // Centered above the monster
         let healthBarY = monster.y - 10; // Slightly above the monster
 
-        // Draw the red background (empty health)
+        // Draw the red background 
         context.fillStyle = "red";
         context.fillRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
 
-        // Draw the green foreground (current health)
+        // Draw the green
         let maxHealth = monster.type === "boss" ? 500 : (30 + currentWave * 5); // Adjust max health based on type
         let healthPercentage = monster.health / monster.maxHealth;
         context.fillStyle = "green";
         context.fillRect(healthBarX, healthBarY, healthBarWidth * healthPercentage, healthBarHeight);
 
-        // Optional: Add a border around the health bar for better aesthetics
         context.strokeStyle = "black";
         context.lineWidth = 1;
         context.strokeRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
@@ -277,7 +295,7 @@ function draw() {
                 }
             }
 
-            continue; // Skip to next monster
+            continue;
         }
 
         // Captured monster logic
@@ -333,11 +351,11 @@ function draw() {
     for (let i = 0; i < healthPickups.length; i++) {
         let pickup = healthPickups[i];
         context.drawImage(
-            pickup.icon, // Use the heart image
-            pickup.x - pickup.size / 2, // Center the image horizontally
-            pickup.y - pickup.size / 2, // Center the image vertically
-            pickup.size, // Width of the image
-            pickup.size  // Height of the image
+            pickup.icon,
+            pickup.x - pickup.size / 2,
+            pickup.y - pickup.size / 2,
+            pickup.size,
+            pickup.size
         );
     }
 
@@ -346,8 +364,8 @@ function draw() {
         let pickup = healthPickups[i];
         let distToPlayer = Math.hypot(player.x - pickup.x, player.y - pickup.y);
         if (distToPlayer < pickup.size / 2 + player.width / 2) {
-            player.health = Math.min(player.health + pickup.healAmount, 100); // Cap health at 100
-            healthPickups.splice(i, 1); // Remove the pickup
+            player.health = Math.min(player.health + pickup.healAmount, 100);
+            healthPickups.splice(i, 1);
             i--;
             console.log("Health restored!");
         }
@@ -357,13 +375,15 @@ function draw() {
     // UI elements
     context.fillStyle = "black";
     context.font = "18px Arial";
-    context.fillText(`Health: ${player.health}`, 10, 45);
-    context.fillText(`Score: ${score}`, 10, 70);
-    context.fillText(`Coins: ${player.coins}`, 10, 20);
-    context.fillText(`Wave: ${currentWave}/${maxWaves}`, 10, 95);
+    context.textAlign = "left"; // Align text to the left
+    context.textBaseline = "top"; // Align text to the top
+    context.fillText(`Health: ${player.health}`, 10, 10); // Adjusted Y position
+    context.fillText(`Score: ${score}`, 10, 35); // Adjusted Y position
+    context.fillText(`Coins: ${player.coins}`, 10, 60); // Adjusted Y position
+    context.fillText(`Wave: ${currentWave}/${maxWaves}`, 10, 85); // Adjusted Y position
 
     // Draw the custom crosshair
-    context.strokeStyle = "red"; // Crosshair color
+    context.strokeStyle = "red";
     context.lineWidth = 2;
 
     // Horizontal line
@@ -380,13 +400,13 @@ function draw() {
 
     // Draw hook
     if (hook) {
-        // If we have a captured monster, make the hook follow its position
+        // If captured monster, make the hook follow its position
         if (hook.capturedMonster) {
             hook.x = hook.capturedMonster.x + hook.capturedMonster.size / 2;
             hook.y = hook.capturedMonster.y + hook.capturedMonster.size / 2;
         }
 
-        // Draw the hook line
+        // hook line
         context.strokeStyle = hook.capturedMonster ? "green" : "red";
         context.lineWidth = 2;
         context.beginPath();
@@ -394,7 +414,7 @@ function draw() {
         context.lineTo(hook.x, hook.y);
         context.stroke();
 
-        // Draw the hook point
+        // hook point
         context.fillStyle = hook.capturedMonster ? "green" : "red";
         context.fillRect(hook.x - 2, hook.y - 2, 5, 5);
 
@@ -488,12 +508,17 @@ function drawBackground() {
 
 function drawPlayer() {
     let currentSprite;
-    if (player.animationState === "walk") {
+
+    // Determine the current sprite based on the player's state
+    if (player.isFighting) {
+        currentSprite = playerSprites.attack; // Use the attack sprite
+    } else if (player.animationState === "walk") {
         currentSprite = playerSprites.walk;
     } else {
         currentSprite = playerSprites.idle;
     }
 
+    // Draw the current sprite
     context.drawImage(
         currentSprite,
         player.frameX * player.width,
@@ -506,28 +531,35 @@ function drawPlayer() {
         player.height
     );
 
-    if ((moveLeft || moveRight || moveUp || moveDown) && !(moveLeft && moveRight)) {
+    // Handle animation frames
+    if (player.isFighting) {
         frameCounter++;
         if (frameCounter >= frameDelay) {
-            player.frameX = (player.frameX + 1) % player.frameCount; // Loop through frames
+            player.frameX = (player.frameX + 1) % player.frameCount;
+            frameCounter = 0;
+
+            // End the attack animation after one cycle
+            if (player.frameX === 0) {
+                player.isFighting = false; // Reset to idle or walking state
+            }
+        }
+    } else if ((moveLeft || moveRight || moveUp || moveDown) && !(moveLeft && moveRight)) {
+        frameCounter++;
+        if (frameCounter >= frameDelay) {
+            player.frameX = (player.frameX + 1) % player.frameCount;
             frameCounter = 0;
         }
     } else {
         player.frameX = 0; // Reset to the first frame when idle
     }
 
-    if (player.isFighting) {
-        // Use attack sprite or change color to indicate attack
-        context.fillStyle = "red"; // Temporary visual indicator
-        context.fillRect(player.x + player.width / 2, player.y + player.height / 2,
-            player.lastDirection === 3 ? 30 : -30, 5);
-    }
-
+    // Handle player death
     if (player.health <= 0) {
-        console.log("Game Over!");
         context.fillStyle = "red";
-        context.font = "48px Arial";
-        context.fillText("Game Over!", canvas.width / 2 - 100, canvas.height / 2);
+        context.font = "64px Arial";
+        context.textAlign = "center";
+        context.fillText("DEFEATED", canvas.width / 2, canvas.height / 2);
+
         stop();
         return;
     }
@@ -601,9 +633,9 @@ function performMeleeAttack(monster) {
         let damage = 5 + Math.floor(Math.random() * 5); // 5-9 damage
         monster.health -= damage;
 
-        // Visual feedback
+        // Trigger attack animation
         player.isFighting = true;
-        setTimeout(() => { player.isFighting = false; }, 200);
+        player.frameX = 0; // Start attack animation from the first frame
 
         // Show damage number
         createDamageNumber(monster.x, monster.y, damage);
@@ -842,12 +874,12 @@ function createMixedMonster(wave) {
         height: 64,
         color: monsterType.color,
         angle: Math.random() * Math.PI * 2,
-        speed: Math.random() * (1 + wave * 0.3), // Increase speed with wave
+        speed: Math.random() * (1 + wave * 0.3),
         captured: false,
-        health: monsterType.health + wave * 5, // Increase health with wave
+        health: monsterType.health + wave * 5,
         maxHealth: monsterType.health + wave * 5,
-        attackPower: monsterType.attackPower + wave, // Increase attack power with wave
-        escapeChance: Math.random() * 0.2 + 0.05,
+        attackPower: monsterType.attackPower + wave,
+        escapeChance: Math.random() * 0.08 + 0.02, // Escape chance between 2% and 10%
         attackCooldown: false,
         resistance: Math.random() * 0.5 + 0.1,
         ranged: wave > 2 && Math.random() < 0.3, // Some monsters are ranged in later waves
@@ -903,27 +935,24 @@ function updateWaveProgress() {
 
         player.health = 100;
 
+        // Set the wave text and timer
+        waveText = `WAVE ${currentWave} COMPLETE!`;
+        waveTextTimer = 60;
+
         // If not the final wave, prepare for the next one
         if (currentWave < maxWaves) {
-            console.log(`Preparing for wave ${currentWave + 1}`);
-
-            // Show wave completion message on screen
-            context.fillStyle = "green";
-            context.font = "30px Arial";
-            context.fillText(`Wave ${currentWave} Complete!`, canvas.width / 2 - 150, canvas.height / 2);
-
-            // Start next wave after delay
             setTimeout(() => {
                 currentWave++;
+                waveText = `WAVE ${currentWave}`;
+                waveTextTimer = 60;
                 spawnWave();
-            }, 2000);
+            }, 3000); // Delay the next wave by 3 seconds
         } else {
-            // Game complete - victory!
+            // Game complete
             console.log("All waves completed! Victory!");
-            context.fillStyle = "gold";
-            context.font = "48px Arial";
-            context.fillText("Victory!", canvas.width / 2 - 100, canvas.height / 2);
-            stop(); // Stop the game loop
+            waveText = "VICTORY!";
+            waveTextTimer = 180;
+            stop();
             return;
         }
     }
@@ -1029,27 +1058,23 @@ function spawnBoss() {
 function activate(event) {
     let key = event.key.toLowerCase();
 
-    if (event.key === "ArrowLeft" ||
-        event.key === "ArrowRight" ||
-        event.key === "ArrowUp" ||
-        event.key === "ArrowDown" ||
-        event.key === "w" ||
+    if (event.key === "w" ||
         event.key === "a" ||
         event.key === "s" ||
         event.key === "d") {
         event.preventDefault();
     }
 
-    if (key === "ArrowLeft" || key === "a") {
+    if (key === "a") {
         moveLeft = true;
         player.animationState = "walk";
-    } else if (key === "ArrowUp" || key === "w") {
+    } else if (key === "w") {
         moveUp = true;
         player.animationState = "walk";
-    } else if (key === "ArrowRight" || key === "d") {
+    } else if (key === "d") {
         moveRight = true;
         player.animationState = "walk";
-    } else if (key === "ArrowDown" || key === "s") {
+    } else if (key === "s") {
         moveDown = true;
         player.animationState = "walk";
     }
@@ -1090,33 +1115,33 @@ function activate(event) {
         hook = null;
     }
 
-    // FOR DEBUG ONLY - manual wave progression with 'n' key
-    if (key === "n") {
-        debugGameState();
-        if (waveInProgress) {
-            currentWave++;
-            if (currentWave <= maxWaves) {
-                spawnWave();
-            } else {
-                console.log("Already at max wave!");
-            }
-        } else {
-            console.log("Can't start new wave while current wave is in progress!");
-        }
-    }
+    // // FOR DEBUG ONLY - manual wave progression with 'n' key
+    // if (key === "n") {
+    //     debugGameState();
+    //     if (waveInProgress) {
+    //         currentWave++;
+    //         if (currentWave <= maxWaves) {
+    //             spawnWave();
+    //         } else {
+    //             console.log("Already at max wave!");
+    //         }
+    //     } else {
+    //         console.log("Can't start new wave while current wave is in progress!");
+    //     }
+    // }
 }
 
 
 function deactivate(event) {
     let key = event.key.toLowerCase();
 
-    if (key === "ArrowLeft" || key === "a") {
+    if (key === "a") {
         moveLeft = false;
-    } else if (key === "ArrowUp" || key === "w") {
+    } else if (key === "w") {
         moveUp = false;
-    } else if (key === "ArrowRight" || key === "d") {
+    } else if (key === "d") {
         moveRight = false;
-    } else if (key === "ArrowDown" || key === "s") {
+    } else if (key === "s") {
         moveDown = false;
     } else if (key === "e") {
         reeling = false;

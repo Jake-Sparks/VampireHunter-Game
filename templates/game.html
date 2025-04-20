@@ -7,5 +7,19 @@
 {% block main_content %}
 <canvas width="1024" height="576"></canvas>
 <script src="{{ url_for('static', filename='vampire.js') }}" type="module"></script>
+
+
+<p>
+    You can only deal damage to the monsters while they are hooked and pulled close.
+</p>
+
+<ul>
+    <li>Press E to fire the hook.</li>
+    <li>Press R to reel back in the hook.</li>
+    <li>Click to deal damage when close.</li>
+</ul>
+
 {% endblock %}
+
+
 
