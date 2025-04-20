@@ -104,6 +104,8 @@ let player = {
     lastDirection: 0
 };
 
+let ADMIN_MODE = false; // Set to true to enable invincibility
+
 let score = 0;
 
 let waveText = null;
@@ -182,7 +184,7 @@ function draw() {
     then = now - (elapsed % fpsInterval);
 
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.fillStyle = "#856cef"; 
+    context.fillStyle = "#856cef";
 
     drawBackground();
     drawPlayer();
@@ -248,11 +250,11 @@ function draw() {
         let healthBarX = monster.x + (monster.size / 2) - (healthBarWidth / 2); // Centered above the monster
         let healthBarY = monster.y - 10; // Slightly above the monster
 
-        // Draw the red background 
+        // Draw the red background for health
         context.fillStyle = "red";
         context.fillRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
 
-        // Draw the green
+        // Draw the green health
         let healthPercentage = monster.health / monster.maxHealth;
         context.fillStyle = "green";
         context.fillRect(healthBarX, healthBarY, healthBarWidth * healthPercentage, healthBarHeight);
@@ -330,7 +332,9 @@ function draw() {
             let distToPlayer = Math.hypot(player.x - monster.x, player.y - monster.y);
             if (distToPlayer < 50 && !monster.attackCooldown) {
                 console.log("Monster attacks!");
-                player.health -= monster.attackPower;
+                if (!ADMIN_MODE) { // Prevent health reduction in admin mode
+                    player.health -= monster.attackPower;
+                }
                 monster.attackCooldown = true;
                 setTimeout(() => { monster.attackCooldown = false; }, 1000);
             }
@@ -371,12 +375,12 @@ function draw() {
     // UI elements
     context.fillStyle = "black";
     context.font = "18px Arial";
-    context.textAlign = "left"; // Align text to the left
-    context.textBaseline = "top"; // Align text to the top
-    context.fillText(`Health: ${player.health}`, 10, 10); // Adjusted Y position
-    context.fillText(`Score: ${score}`, 10, 35); // Adjusted Y position
-    context.fillText(`Coins: ${player.coins}`, 10, 60); // Adjusted Y position
-    context.fillText(`Wave: ${currentWave}/${maxWaves}`, 10, 85); // Adjusted Y position
+    context.textAlign = "left";
+    context.textBaseline = "top";
+    context.fillText(`Health: ${player.health}`, 10, 10);
+    context.fillText(`Score: ${score}`, 10, 35);
+    context.fillText(`Coins: ${player.coins}`, 10, 60);
+    context.fillText(`Wave: ${currentWave}/${maxWaves}`, 10, 85);
 
     // Draw the custom crosshair
     context.strokeStyle = "red";
@@ -503,7 +507,7 @@ function drawBackground() {
 function drawPlayer() {
     let currentSprite;
 
-    // Determine the current sprite based on the player's state
+    // Determine the current sprite based on the state
     if (player.isFighting) {
         currentSprite = playerSprites.attack; // Use the attack sprite
     } else if (player.animationState === "walk") {
@@ -512,7 +516,7 @@ function drawPlayer() {
         currentSprite = playerSprites.idle;
     }
 
-    // Draw the current sprite
+    // Draw the sprite
     context.drawImage(
         currentSprite,
         player.frameX * player.width,
@@ -544,10 +548,10 @@ function drawPlayer() {
             frameCounter = 0;
         }
     } else {
-        player.frameX = 0; // Reset to the first frame when idle
+        player.frameX = 0;
     }
 
-    // Handle player death
+    // Player death
     if (player.health <= 0) {
         context.fillStyle = "red";
         context.font = "64px Arial";
@@ -565,7 +569,7 @@ function movePlayer() {
     if (moveLeft && player.x > 0) {
         player.xChange -= 0.5;
         player.animationState = "walk";
-        player.frameY = 2; // row for walking left
+        player.frameY = 2; // Row for walking left
         player.lastDirection = 2; // left
     }
     if (moveRight && player.x + player.width < canvas.width) {
@@ -627,9 +631,9 @@ function performMeleeAttack(monster) {
         let damage = 5 + Math.floor(Math.random() * 5); // 5-9 damage
         monster.health -= damage;
 
-        // Trigger attack animation
+        // Attack animation
         player.isFighting = true;
-        player.frameX = 0; // Start attack animation from the first frame
+        player.frameX = 0; // Start from the first frame
 
         // Show damage number
         createDamageNumber(monster.x, monster.y, damage);
@@ -642,7 +646,7 @@ function createDamageNumber(x, y, amount) {
         x: x,
         y: y,
         amount: amount,
-        life: 30, // frames it will be visible
+        life: 30,
         color: "white"
     });
 }
@@ -654,7 +658,7 @@ function drawDamageNumbers() {
         dmg.life--;
         dmg.y -= 1; // Float upward
 
-        // Fade out as life decreases
+        // Fade out as life/health decreases
         let alpha = dmg.life / 30;
         context.fillStyle = `rgba(255, 0, 0, ${alpha})`;
         context.font = "16px Arial";
@@ -695,9 +699,11 @@ function drawProjectiles() {
         // Check for collisions with the player
         if (collides(projectile, player)) {
             console.log("Player hit by fireball!");
-            player.health -= 10; // Reduce player's health by 10
+            if (!ADMIN_MODE) { // Prevent health reduction in admin mode
+                player.health -= 10;
+            }
             projectiles.splice(i, 1); // Remove the projectile
-            i--; // Adjust index after removing the projectile
+            i--; // Adjust index after removing projectile
             continue;
         }
 
@@ -750,7 +756,7 @@ function preventMonsterOverlap() {
 
             // If they're too close, push them apart
             if (distance < minDistance) {
-                // Direction vector (normalized)
+                // Direction (normalised)
                 let nx = dx / distance || 0;
                 let ny = dy / distance || 0;
 
@@ -783,11 +789,11 @@ function spawnWave() {
     monsterArray = [];
     healthPickups = [];
 
-    // Determine wave content based on current wave
+    // Determine wave stuff based on current wave
     if (currentWave < maxWaves) {
         let numMonsters;
 
-        // Adjust the number of monsters for Wave 4 and Wave 5
+        // Adjust the number of monsters for Wave 4 and rest of em
         if (currentWave === 4) {
             numMonsters = 10; // Set a fixed number of monsters for Wave 4
         } else {
@@ -799,7 +805,7 @@ function spawnWave() {
             monsterArray.push(monster);
         }
 
-        // Spawn health pick-ups in Wave 3, Wave 4
+        // Spawn health pick-ups in Wave 3 and Wave 4
         if (currentWave === 3 || currentWave === 4) {
             let numPickups = 3; // Number of health pick-ups to spawn
             for (let i = 0; i < numPickups; i++) {
@@ -874,29 +880,33 @@ function createMixedMonster(wave) {
 
 
 function calculateMonsterDistribution(wave, numTypes) {
-    // This function creates a probability distribution for different monster types
-    // based on the current wave
-    let distribution = [];
+    // Create a base distribution array with all values set to 0
+    let distribution = new Array(numTypes).fill(0);
 
-    // For wave 1, mostly type 0 (goblins) with a small chance of type 1
+    // Adjust the distribution based on the wave
     if (wave === 1) {
-        distribution = [0.8, 0.2, 0, 0];
-    }
-    // For wave 2, more type 1 (humans) but still some type 0
-    else if (wave === 2) {
-        distribution = [0.35, 0.55, 0.1, 0];
-    }
-    // For wave 3, introduce type 2 (green vampires) more prominently
-    else if (wave === 3) {
-        distribution = [0.2, 0.3, 0.45, 0.05];
-    }
-    // For wave 4, introduce type 3 (blue vampires) more prominently
-    else if (wave === 4) {
-        distribution = [0.1, 0.2, 0.35, 0.35];
-    }
-    // For wave 5, balance all types equally
-    else {
-        distribution = [0.15, 0.25, 0.25, 0.35];
+        distribution[0] = 0.8; // Mostly type 0 (goblins)
+        if (numTypes > 1) distribution[1] = 0.2; // Small chance of type 1
+    } else if (wave === 2) {
+        distribution[0] = 0.35; // Some type 0
+        if (numTypes > 1) distribution[1] = 0.55; // More type 1
+        if (numTypes > 2) distribution[2] = 0.1; // Small chance of type 2
+    } else if (wave === 3) {
+        distribution[0] = 0.2; // Less type 0
+        if (numTypes > 1) distribution[1] = 0.3; // Some type 1
+        if (numTypes > 2) distribution[2] = 0.45; // More type 2
+        if (numTypes > 3) distribution[3] = 0.05; // Small chance of type 3
+    } else if (wave === 4) {
+        distribution[0] = 0.1; // Minimal type 0
+        if (numTypes > 1) distribution[1] = 0.2; // Some type 1
+        if (numTypes > 2) distribution[2] = 0.35; // More type 2
+        if (numTypes > 3) distribution[3] = 0.35; // Equal chance of type 3
+    } else {
+        // Wave 5 Boss!!!
+        let equalProbability = 1 / numTypes;
+        for (let i = 0; i < numTypes; i++) {
+            distribution[i] = equalProbability;
+        }
     }
 
     return distribution;
@@ -904,7 +914,7 @@ function calculateMonsterDistribution(wave, numTypes) {
 
 
 function updateWaveProgress() {
-    // Handle ranged monster attacks
+    // Ranged monster attacks
     for (let monster of monsterArray) {
         if (monster.ranged && Math.random() < 0.01) {
             fireProjectile(monster);
@@ -931,7 +941,7 @@ function updateWaveProgress() {
                 spawnWave();
             }, 3000); // Delay the next wave by 3 seconds
         } else {
-            // Game complete
+            // Game finished
             console.log("All waves completed!");
             waveText = "VICTORY!";
             waveTextTimer = 180;
@@ -943,7 +953,7 @@ function updateWaveProgress() {
 
 
 function fireProjectile(monster) {
-    // only valid monster objects being processed (error logged otherwise)
+    // Only valid monster objects being processed 
     if (!monster || typeof monster !== "object" || monster.health <= 0 || monster.captured) {
         console.error("Invalid monster object for firing projectile");
         return;
@@ -1031,7 +1041,7 @@ function spawnBoss() {
     monsterArray.push(boss);
     enemiesRemaining = 1;
 
-    // Spawn additional health pickups if it's Wave 5
+    // Spawn additional health pickups for this wave
     if (currentWave === 5) {
         let numPickups = 5; // Number of health pick-ups to spawn
         for (let i = 0; i < numPickups; i++) {
@@ -1092,6 +1102,7 @@ function activate(event) {
         }
     }
 
+    // Unhook the monster
     if (key === "r" && hook) {
         console.log("Player withdrew hook");
         if (hook.capturedMonster) {
@@ -1101,7 +1112,13 @@ function activate(event) {
         hook = null;
     }
 
-    // FOR DEBUG ONLY - manual wave progression with 'n' key
+    // Derek Powers
+    if (key === "i") {
+        ADMIN_MODE = !ADMIN_MODE;
+        console.log(`Admin Mode: ${ADMIN_MODE ? "Enabled" : "Disabled"}`);
+    }
+
+    // Derek Powers --> Manual wave progression with 'n' key
     if (key === "n") {
         debugGameState();
         if (waveInProgress) {
@@ -1158,6 +1175,7 @@ function load_assets(assets, callback) {
 }
 
 
+// Debugging function to log game state when looking for problemos
 function debugGameState() {
     console.log("=== GAME STATE DEBUG ===");
     console.log(`Current Wave: ${currentWave}`);
