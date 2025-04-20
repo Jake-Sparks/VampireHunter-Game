@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ caption }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}" />
     {% block head %}
     {% endblock %}
 </head>
@@ -17,12 +18,14 @@
     <nav>
         {% if g.user %}
             <ul>
-                <li>{{ g.user }}</li>
                 <li><a href="{{ url_for('home') }}">Home</a></li>
                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                <li>{{ g.user }}</li>
             </ul>   
         {% else %}
             <ul>
+                {% block nav %}
+                {% endblock %}
                 <li><a href="{{ url_for('login') }}">Login</a></li>
                 <li><a href="{{ url_for('signup') }}">Sign-up</a></li>
             </ul>

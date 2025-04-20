@@ -1,14 +1,26 @@
 {% extends "base.html" %}
 
+
 {% block header %}
 <h1>Vampire Hunter</h1>
 {% endblock %}
 
 {% block main_content %}
 
-<p>CLICK HERE TO
-    <a href="{{ url_for('play') }}">PLAY</a>
+<p>Before jumping in, here's a few instructions to get you ready.</p>
+
+<p>
+    You can only deal damage to the monsters while they are hooked and pulled in close.
 </p>
+
+<p>Controls:</p>
+<ul>
+    <li>Press E to fire the hook.</li>
+    <li>Press R to reel back in the hook.</li>
+    <li>Click to deal damage while reeled in close.</li>
+</ul>
+
+<p class="game"><a href="{{ url_for('play') }}">PLAY</a></p>
 
 <p>
     <a href="{{ url_for('attributions') }}">Attributions</a>

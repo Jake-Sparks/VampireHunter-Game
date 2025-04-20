@@ -4,6 +4,10 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='vampire.css') }}" />
 {% endblock %}
 
+{% block nav %}
+    <li><a href="{{ url_for('home') }}">Home</a></li>
+{% endblock %}
+
 {% block main_content %}
 <canvas width="1024" height="576"></canvas>
 <script src="{{ url_for('static', filename='vampire.js') }}" type="module"></script>
