@@ -12,30 +12,35 @@ nav {
     align-items: center;
     background-color: #333; 
     padding: 0.8em 1em; 
-    color: white; /* White text for contrast */
+    color: white; 
 }
 
 nav ul {
     display: flex;
     flex-direction: row;
-    list-style-type: none; /* Remove bullet points */
-    padding: 0; /* Remove default padding */
+    list-style-type: none; 
+    padding: 0; 
     margin: 0;
 }
 
 nav a {
-    text-decoration: none; /* Remove underline from links */
-    color: white; /* White text for links */
-    margin: 0 10px; /* Add spacing between links */
-    font-weight: bold; /* Make links stand out */
+    text-decoration: none; 
+    color: white; 
+    margin: 0 10px; 
+    font-weight: bold; 
 }
 
 nav a:hover {
-    color: #ffcc00; /* Highlight link on hover */
+    color: #ffcc00; 
 }
 
 /* ------------------------------- */
 
+h3 {
+    color:#ceb423;
+    font-size: 1.2em;
+    margin: 0 0 0.5em 0.4em;
+}
 
 p {
     font-size: 1.2em;
@@ -45,6 +50,10 @@ p {
 p a {
     color: #ffcc00; 
     text-decoration: none; 
+}
+
+ul {
+    margin-top: 0;
 }
 
 p a:hover {

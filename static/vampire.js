@@ -68,9 +68,6 @@ let playerSprites = {
     attack: new Image()
 };
 
-
-playerSprites.attack.src = "../static/images/vampire1_attack.png";
-
 let monsterSprites = {
     purple: new Image(),
     red: new Image(),
@@ -80,9 +77,6 @@ let monsterSprites = {
 };
 
 let healthIcon = new Image();
-healthIcon.src = "../static/images/heart.png";
-
-
 let vampTileset = new Image();
 
 let player = {
@@ -507,9 +501,9 @@ function drawBackground() {
 function drawPlayer() {
     let currentSprite;
 
-    // Determine the current sprite based on the state
+    // Sprite based on the state
     if (player.isFighting) {
-        currentSprite = playerSprites.attack; // Use the attack sprite
+        currentSprite = playerSprites.attack; 
     } else if (player.animationState === "walk") {
         currentSprite = playerSprites.walk;
     } else {
@@ -658,7 +652,7 @@ function drawDamageNumbers() {
         dmg.life--;
         dmg.y -= 1; // Float upward
 
-        // Fade out as life/health decreases
+        // Fade out the text as the monsters health decreases
         let alpha = dmg.life / 30;
         context.fillStyle = `rgba(255, 0, 0, ${alpha})`;
         context.font = "16px Arial";
@@ -880,7 +874,7 @@ function createMixedMonster(wave) {
 
 
 function calculateMonsterDistribution(wave, numTypes) {
-    // Create a base distribution array with all values set to 0
+    // Base distribution Array with all values set to 0
     let distribution = new Array(numTypes).fill(0);
 
     // Adjust the distribution based on the wave
@@ -888,21 +882,21 @@ function calculateMonsterDistribution(wave, numTypes) {
         distribution[0] = 0.8; // Mostly type 0 (goblins)
         if (numTypes > 1) distribution[1] = 0.2; // Small chance of type 1
     } else if (wave === 2) {
-        distribution[0] = 0.35; // Some type 0
-        if (numTypes > 1) distribution[1] = 0.55; // More type 1
-        if (numTypes > 2) distribution[2] = 0.1; // Small chance of type 2
+        distribution[0] = 0.35; // Some type 0 (goblins)
+        if (numTypes > 1) distribution[1] = 0.55; // More type 1 (humans)
+        if (numTypes > 2) distribution[2] = 0.1; // Small chance of type 2 (blue vampire)
     } else if (wave === 3) {
-        distribution[0] = 0.2; // Less type 0
-        if (numTypes > 1) distribution[1] = 0.3; // Some type 1
-        if (numTypes > 2) distribution[2] = 0.45; // More type 2
-        if (numTypes > 3) distribution[3] = 0.05; // Small chance of type 3
+        distribution[0] = 0.2; // Fewer type 0 (goblins)
+        if (numTypes > 1) distribution[1] = 0.3; // Some type 1 (humans)
+        if (numTypes > 2) distribution[2] = 0.45; // More type 2 (blue vampire)
+        if (numTypes > 3) distribution[3] = 0.05; // Small chance of type 3 (red vampire)
     } else if (wave === 4) {
-        distribution[0] = 0.1; // Minimal type 0
-        if (numTypes > 1) distribution[1] = 0.2; // Some type 1
-        if (numTypes > 2) distribution[2] = 0.35; // More type 2
-        if (numTypes > 3) distribution[3] = 0.35; // Equal chance of type 3
+        distribution[0] = 0.1; // Minimal type 0 (goblins)
+        if (numTypes > 1) distribution[1] = 0.2; // Some type 1 (humans)
+        if (numTypes > 2) distribution[2] = 0.35; // More type 2 (blue vampire)
+        if (numTypes > 3) distribution[3] = 0.35; // Equal chance of type 3 (red vampire)
     } else {
-        // Wave 5 Boss!!!
+        // Wave 5, Boss!!!
         let equalProbability = 1 / numTypes;
         for (let i = 0; i < numTypes; i++) {
             distribution[i] = equalProbability;
@@ -1112,24 +1106,23 @@ function activate(event) {
         hook = null;
     }
 
-    // Derek Powers
-    if (key === "i") {
-        ADMIN_MODE = !ADMIN_MODE;
-        console.log(`Admin Mode: ${ADMIN_MODE ? "Enabled" : "Disabled"}`);
-    }
+    // // Derek Powers
+    // if (key === "i") {
+    //     ADMIN_MODE = !ADMIN_MODE;
+    // }
 
-    // Derek Powers --> Manual wave progression with 'n' key
-    if (key === "n") {
-        debugGameState();
-        if (waveInProgress) {
-            currentWave++;
-            if (currentWave <= maxWaves) {
-                spawnWave();
-            } else {
-                console.log("Already at max wave!");
-            }
-        }
-    }
+    // // Derek Powers --> Manual wave progression with 'n' key
+    // if (key === "n") {
+    //     debugGameState();
+    //     if (waveInProgress) {
+    //         currentWave++;
+    //         if (currentWave <= maxWaves) {
+    //             spawnWave();
+    //         } else {
+    //             console.log("Already at max wave!");
+    //         }
+    //     }
+    // }
 }
 
 
@@ -1172,6 +1165,9 @@ function load_assets(assets, callback) {
         }
         element.src = asset.url;
     }
+
+    playerSprites.attack.src = "../static/images/vampire1_attack.png";
+    healthIcon.src = "../static/images/heart.png";
 }
 
 
